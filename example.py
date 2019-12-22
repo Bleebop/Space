@@ -74,7 +74,7 @@ solarsyst.AddPlanet(Eeloo,16)
 
 plan_name_dict = solarsyst.plan_names
 
-gene = 1000
+gene = 20
 pop = 20
 F = 0.7
 CR = 0.7
