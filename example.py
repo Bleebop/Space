@@ -81,8 +81,6 @@ CR = 0.7
 t_lim = 10*year
 s_sit = 'circ_15r'
 e_sit = 'circ_15r'
-#s_sit = 'no'
-#e_sit = 'no'
 
 bou_rb = [[1.05,12],[-PI,PI]]
 bou_eta = [[0.01,0.9]]
@@ -102,38 +100,9 @@ print(fit_l[cand_ind])
 startpos = ['testsat', 13599840256, 0, 0,0,0,0,0,Kerbol]
 testsat = Bodies.Sat(*startpos)
 
-#best_cand = np.array([  2.51496855e+06,   9.98962170e+02,   4.42948820e-01,
-#         4.73636853e-01,   1.04154921e-02,   3.44444154e+06,
-#         8.99999050e+00,  -2.07128160e+00,   2.33336793e-01,
-#         1.82299851e+07,   8.99998993e+00,  -2.14001080e+00,
-#        -5.64889148e-01,   1.44649618e+06])
-
 (DV_DSM, pos_f, pos_tr, orb_tr) = testsat.MoveToEnd2(plan_list, best_cand, True)
 
-#DV_tot = obj_MGA_1DSM(plan_list, best_cand, testsat, s_sit, e_sit)
-
 trajViz.Visualize(pos_tr, orb_tr, plan_name_dict, True)
-
-
-
-#startpos = ['testsat', 13599840256, 0, 0,0,0,0,0,Kerbol]
-#dec_vec = np.array([0, 1000, 0.5, 0.5, 0.5, Kerbin.T/4, 8e5, 1, 0.5, Eve.T*1.6])
-#testsat = Sat(*startpos)
-#(DV_tot, pos_f, pos_tr, orb_tr) = testsat.MoveToEnd2(plan_list, dec_vec, True)
-
-
-#r1 = np.array([13599840256., 0., 0.])
-#r2 = Eeloo.GetCartFromOrb(Eeloo.T)[0]
-#v1, v2 = lamb_solv(r1,r2,Eeloo.T, Kerbol.mu)
-#
-#testsat.X = r1
-#testsat.Vc = v1
-#testsat.GetOrbFromCart(0)
-#
-#mean_mo = np.sqrt(Kerbol.mu/abs(testsat.SMA**3))
-#
-#pos_vel_dict = {'Kerbol' : [[0,[r1, v1]], [Eeloo.T,[r2,v2]]]}
-#orb_dict = {'Kerbol' : [[testsat.SMA, testsat.ECC, testsat.INC, testsat.LAN, testsat.LPE, testsat.MNA, testsat.MNA+mean_mo*Eeloo.T]]}
 
 
 
