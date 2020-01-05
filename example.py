@@ -74,10 +74,6 @@ solarsyst.AddPlanet(Eeloo,16)
 
 plan_name_dict = solarsyst.plan_names
 
-gene = 20
-pop = 20
-F = 0.7
-CR = 0.7
 t_lim = 10*year
 s_sit = 'circ_15r'
 e_sit = 'circ_15r'
@@ -85,22 +81,47 @@ e_sit = 'circ_15r'
 bou_rb = [[1.05,12],[-PI,PI]]
 bou_eta = [[0.01,0.9]]
 
-plan_list = [Kerbin, Duna, Jool, Eeloo]
-bounds = [[0,20*year],[50,4000]]+Optimiser.build_bounds(plan_list, bou_eta, bou_rb)
+plan_list = [Kerbin, Kerbin, Jool]
+#plan_list = [Kerbin, Eve, Moho]
+## best (?) 3873
+#plan_list = [Kerbin,Moho]
+## best (?) 4054
+#plan_list = [Kerbin, Duna, Jool, Eeloo]
+## current best around 3000m/s
+#plan_list = [Kerbin, Eeloo]
+## probable best fit for direct transfer at 3489m/s
+bounds = [[0,t_lim],[50,4000]]+Optimiser.build_bounds(plan_list, bou_eta, bou_rb)
 
-resu, fit_l = Optimiser.GeneticAlgo2(plan_list, bounds, t_lim, s_sit, e_sit, gene, pop, F, CR)
+pop = 20
+Feval = 40000
+F = 0.7
+CR = 0.7
+resu, fit_l = Optimiser.GeneticAlgo2(plan_list, bounds, t_lim, s_sit, e_sit, Feval, pop, F, CR)
 
 for i, fit in enumerate(fit_l):
     if np.isnan(fit):
         fit_l[i] = float('inf')
 cand_ind = np.argmin(fit_l)
 best_cand = resu[cand_ind]
+print("best fit GA:")
 print(fit_l[cand_ind])
+
+# Ti = 20000
+# Tf = 100
+# nfann = 2000
+# Feval = 20000
+# parameters to explore...
+# best_cand, fit, rat_hist = Optimiser.SA_AN(plan_list, bounds, t_lim, s_sit, e_sit, Ti, Tf, nfann, Feval)
+# print(fit)
+
+cand_local, fit_local, N_eval = Optimiser.local_search(best_cand,0.0001,0.01,plan_list,bounds,t_lim,s_sit,e_sit,False)
+print(fit_local)
+print(N_eval)
 
 startpos = ['testsat', 13599840256, 0, 0,0,0,0,0,Kerbol]
 testsat = Bodies.Sat(*startpos)
 
-(DV_DSM, pos_f, pos_tr, orb_tr) = testsat.MoveToEnd2(plan_list, best_cand, True)
+(DV_DSM, pos_f, pos_tr, orb_tr) = testsat.MoveToEnd2(plan_list, cand_local, True)
 
 trajViz.Visualize(pos_tr, orb_tr, plan_name_dict, True)
 
